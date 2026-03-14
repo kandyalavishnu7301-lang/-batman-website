@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Batman Cinematic Website</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+color:white;
+background:black;
+overflow-x:hidden;
+}
+
+/* INTRO */
+
+#intro{
+position:fixed;
+width:100%;
+height:100vh;
+background:black;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:10000;
+}
+
+#intro video{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.fade-out{
+animation:fadeOut 1.5s forwards;
+}
+
+@keyframes fadeOut{
+0%{opacity:1;}
+100%{opacity:0;visibility:hidden;}
+}
+
+/* SKIP BUTTON */
+
+#skipBtn{
+position:absolute;
+bottom:40px;
+right:40px;
+padding:12px 25px;
+background:rgba(255,255,255,0.2);
+border:1px solid white;
+color:white;
+cursor:pointer;
+border-radius:6px;
+}
+
+/* NAVBAR */
+
+nav{
+position:fixed;
+top:0;
+width:100%;
+display:flex;
+justify-content:space-between;
+padding:20px 40px;
+background:rgba(0,0,0,0.6);
+backdrop-filter:blur(10px);
+z-index:10;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+margin:0 15px;
+}
+
+#batLogo{
+cursor:pointer;
+font-weight:bold;
+}
+
+/* HERO */
+
+.hero{
+height:100vh;
+background:url("batman.jpg") center/cover no-repeat;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:60px;
+transition:transform 0.2s ease;
+}
+
+/* SECTIONS */
+
+.section{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:40px;
+background-size:cover;
+background-position:center;
+background-attachment:fixed;
+cursor:pointer;
+}
+
+.sec1{
+background:url("thor 3.jpg") center/cover no-repeat;
+}
+
+.sec2{
+background:url("thor 1.jpg") center/cover no-repeat;
+}
+
+.sec3{
+background:url("thor 2.jpg") center/cover no-repeat;
+}
+
+/* TEXT BOX */
+
+.overlay{
+background:rgba(0,0,0,0.6);
+padding:20px 40px;
+border-radius:10px;
+box-shadow:0 0 30px rgba(255,255,255,0.3);
+}
+
+/* RED LIGHTNING CURSOR */
+
+.spark{
+position:fixed;
+width:8px;
+height:8px;
+background:red;
+border-radius:50%;
+pointer-events:none;
+box-shadow:0 0 10px red,0 0 20px red,0 0 30px red;
+animation:sparkfade 0.6s linear forwards;
+z-index:9999;
+}
+
+@keyframes sparkfade{
+0%{opacity:1;transform:scale(1);}
+100%{opacity:0;transform:scale(3);}
+}
+
+/* SECRET PANEL */
+
+#secretPanel{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:black;
+border:2px solid red;
+padding:40px;
+display:none;
+z-index:20000;
+text-align:center;
+box-shadow:0 0 20px red;
+}
+
+#secretPanel button{
+display:block;
+margin:15px auto;
+padding:10px 20px;
+background:red;
+border:none;
+color:white;
+cursor:pointer;
+}
+
+/* BAT SIGNAL */
+
+#batSignal{
+position:fixed;
+bottom:-200px;
+right:40px;
+width:200px;
+opacity:0;
+transition:all 1.5s ease;
+z-index:5000;
+filter:drop-shadow(0 0 30px yellow);
+}
+
+#batSignal.show{
+bottom:40px;
+opacity:1;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- INTRO VIDEO -->
+
+<div id="intro">
+
+<video autoplay muted playsinline id="introVideo">
+<source src="videoplayback.mp4" type="video/mp4">
+</video>
+
+<button id="skipBtn">Skip Intro</button>
+
+</div>
+
+<audio id="bgmusic">
+<source src="song.mp3" type="audio/mpeg">
+</audio>
+
+<!-- NAVBAR -->
+
+<nav>
+
+<div id="batLogo">BATMAN</div>
+
+<div>
+<a href="#">Home</a>
+<a href="#">Suit</a>
+<a href="#">Gadgets</a>
+<a href="#">Vehicles</a>
+</div>
+
+</nav>
+
+<!-- HERO -->
+
+<section class="hero">
+<div class="overlay">THE DARK KNIGHT</div>
+</section>
+
+<!-- SECTIONS -->
+
+<section class="section sec1" onclick="openChatGPT()">
+<div class="overlay">THOR POWER</div>
+</section>
+
+<section class="section sec2" onclick="openPerplexity()">
+<div class="overlay">GOD OF THUNDER</div>
+</section>
+
+<section class="section sec3" onclick="openChrome()">
+<div class="overlay">MJOLNIR</div>
+</section>
+
+<!-- BAT SIGNAL -->
+
+<img id="batSignal" src="batsignal.png">
+
+<!-- SECRET PANEL -->
+
+<div id="secretPanel">
+
+<h2>BAT COMPUTER</h2>
+
+<button onclick="openChatGPT()">ChatGPT</button>
+<button onclick="openPerplexity()">Perplexity</button>
+<button onclick="openChrome()">Browser</button>
+<button onclick="closePanel()">Close</button>
+
+</div>
+
+<script>
+
+/* INTRO */
+
+let video=document.getElementById("introVideo");
+let music=document.getElementById("bgmusic");
+let skip=document.getElementById("skipBtn");
+
+video.addEventListener("play",function(){
+music.play().catch(function(){});
+});
+
+video.addEventListener("ended",closeIntro);
+
+skip.onclick=closeIntro;
+
+function closeIntro(){
+
+let intro=document.getElementById("intro");
+
+intro.classList.add("fade-out");
+
+music.pause();
+
+setTimeout(function(){
+intro.style.display="none";
+},1500);
+
+}
+
+/* LIGHTNING CURSOR */
+
+document.addEventListener("mousemove",function(e){
+
+let spark=document.createElement("div");
+
+spark.className="spark";
+
+spark.style.left=e.clientX+"px";
+spark.style.top=e.clientY+"px";
+
+document.body.appendChild(spark);
+
+setTimeout(function(){
+spark.remove();
+},600);
+
+});
+
+/* HERO PARALLAX */
+
+let hero=document.querySelector(".hero");
+
+document.addEventListener("mousemove",function(e){
+
+let x=(window.innerWidth/2 - e.clientX)/25;
+let y=(window.innerHeight/2 - e.clientY)/25;
+
+hero.style.transform="translate("+x+"px,"+y+"px) scale(1.05)";
+
+});
+
+/* OPEN LINKS */
+
+function openChatGPT(){
+window.open("https://chat.openai.com","_blank");
+}
+
+function openPerplexity(){
+window.open("https://www.perplexity.ai","_blank");
+}
+
+function openChrome(){
+window.open("https://www.google.com","_blank");
+}
+
+/* SECRET KEYBOARD */
+
+let keysPressed=[];
+
+document.addEventListener("keydown",function(e){
+
+keysPressed.push(e.key.toUpperCase());
+
+if(keysPressed.length>3){
+keysPressed.shift();
+}
+
+if(keysPressed.join("")==="BAT"){
+document.getElementById("secretPanel").style.display="block";
+}
+
+});
+
+/* BATMAN LOGO SECRET */
+
+let batLogo=document.getElementById("batLogo");
+let clickCount=0;
+
+batLogo.addEventListener("click",function(){
+
+clickCount++;
+
+if(clickCount===3){
+document.getElementById("secretPanel").style.display="block";
+clickCount=0;
+}
+
+setTimeout(function(){
+clickCount=0;
+},2000);
+
+});
+
+/* CLOSE PANEL */
+
+function closePanel(){
+document.getElementById("secretPanel").style.display="none";
+}
+
+/* BAT SIGNAL SCROLL */
+
+let batSignal=document.getElementById("batSignal");
+
+window.addEventListener("scroll",function(){
+
+let scrollPosition=window.scrollY + window.innerHeight;
+let pageHeight=document.body.offsetHeight;
+
+if(scrollPosition > pageHeight - 100){
+batSignal.classList.add("show");
+}
+
+});
+
+</script>
+
+</body>
+</html>
